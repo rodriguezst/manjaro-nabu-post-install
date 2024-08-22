@@ -1,0 +1,64 @@
+#!/bin/sh
+# This is the post install script for Xiaomi Pad 5 devices!
+
+# Set chassis
+#hostnamectl set-chassis handset
+
+# Expand the filesystem
+resize-fs
+
+# Detect mobile editions where user needs to be created (no wizard available)
+CREATE_USER=false
+# plasma-mobile
+[[ $(pacman -Q plasma-mobile-settings 2>/dev/null) ]] && CREATE_USER=true
+# phosh
+[[ $(pacman -Q phosh-mobile-settings 2>/dev/null) ]] && CREATE_USER=true
+# gnome-mobile
+[[ $(pacman -Q gnome-shell-mobile 2>/dev/null) ]] && CREATE_USER=true
+
+# Add users on phosh and plasma-mobile
+if [ $CREATE_USER ]; then
+    [[ $(pacman -Q plasma-mobile-settings 2>/dev/null) ]] && USER='kde' || USER='manjaro'
+    echo "$USER" > /tmp/user
+    echo "123456" > /tmp/password
+    echo "root" > /tmp/rootpassword
+    if [ ! -f /usr/bin/pico-wizard ]; then
+        useradd -m -g users -G wheel,sys,audio,input,video,storage,lp,network,users,power,rfkill -p $(openssl passwd -6 $(cat /tmp/password)) \
+        -s /bin/bash $(cat /tmp/user) 1> /dev/null 2>&1
+    fi
+    awk -i inplace -F: "BEGIN {OFS=FS;} \$1 == \"root\" {\$2=\"$(openssl passwd -6 $(cat /tmp/rootpassword))\"} 1" /etc/shadow 1> /dev/null 2>&1
+    rm /tmp/user /tmp/password /tmp/rootpassword
+    # Disable the root login
+    passwd --lock root
+fi
+
+# Generate a fixed MAC address for WLAN based on machine-info
+interface=wlan0
+mac="$((cat /etc/machine-id; echo ${interface}; ) | sha256sum -)"
+echo "[Match]" > /etc/systemd/network/10-$interface.network
+echo "Name=$interface" >> /etc/systemd/network/10-$interface.network
+echo "" >> /etc/systemd/network/10-$interface.network
+echo "[Link]" >> /etc/systemd/network/10-$interface.network
+echo "MACAddress=42:${mac:0:2}:${mac:4:2}:${mac:8:2}:${mac:12:2}:${mac:16:2}" >> /etc/systemd/network/10-$interface.network
+
+# Update appstream DB
+[[ -e /usr/bin/appstreamcli ]] && /usr/bin/appstreamcli refresh-cache --force
+
+# Set locales
+localectl set-locale "en_US.UTF-8"
+
+# Disable this service, so it only gets run on first boot
+systemctl disable nabu-post-install.service
+
+# Start phosh
+[[ -e /usr/bin/phosh ]] && systemctl start phosh
+
+# Start sddm
+[[ -e /usr/bin/sddm ]] && systemctl enable --now sddm
+
+# Pacman Init
+pacman-key --init
+pacman-key --populate archlinuxarm manjaro manjaro-arm
+
+# Setup Waydroid
+[[ -e /usr/bin/setup-waydroid ]] && setup-waydroid

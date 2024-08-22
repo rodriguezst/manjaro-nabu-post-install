@@ -1,0 +1,9 @@
+[Unit]
+Description=Xiaomi Pad 5 Post Install.
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/nabu-post-install
+
+[Install]
+WantedBy=default.target

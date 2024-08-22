@@ -1,0 +1,4 @@
+post_install() {
+  # Enable required systemd services for nabu
+  systemctl enable nabu-post-install qrtr-ns pd-mapper tqftpserv rmtfs qbootctl
+}
