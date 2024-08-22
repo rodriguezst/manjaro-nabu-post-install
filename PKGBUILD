@@ -7,7 +7,7 @@ pkgdesc="Manjaro ARM's Xiaomi Pad 5 post install script"
 arch=('any')
 url="https://www.manjaro.org"
 license=('GPL')
-depends=('gzip' 'glibc-locales' 'qbootctl' 'rmtfs' 'pd-mapper' 'tqftpserv' 'alsa-ucm-conf')
+depends=('gzip' 'glibc-locales' 'alsa-ucm-conf')
 source=("nabu-post-install"
         "nabu-post-install.service"
         "HiFi.conf"
@@ -19,6 +19,7 @@ sha256sums=('98d3bbf47675a0b1393ca2f3ddb0377ff9a150b47648a30ce6e25c3775b6c90c'
             '4393bc0f80d81c96913a1eb27e1a463ced16c7c6a36d116b9db1fda88f0b7ca3')
 
 package() {
+    depends=('qbootctl' 'rmtfs' 'pd-mapper' 'tqftpserv')
     install -Dm755 "${srcdir}/nabu-post-install" -t "${pkgdir}/usr/bin/"
     install -Dm644 "${srcdir}/nabu-post-install.service" -t "${pkgdir}/usr/lib/systemd/system/"
     # Install ALSA UCM profiles
