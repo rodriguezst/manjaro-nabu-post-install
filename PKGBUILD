@@ -1,9 +1,9 @@
 # Maintainer: rodriguezst <git@rodriguezst.es>
 
-pkgname=nabu-post-install
+pkgname=nabu-tweaks
 pkgver=20$(date +%y%m%d)
 pkgrel=1
-pkgdesc="Manjaro ARM's Xiaomi Pad 5 post install script"
+pkgdesc="Tweaks needed to run Manjaro ARM on Xiaomi Pad 5"
 arch=('any')
 url="https://www.manjaro.org"
 license=('GPL')
