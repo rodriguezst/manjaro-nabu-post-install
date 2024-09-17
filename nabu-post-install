@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # This is the post install script for Xiaomi Pad 5 devices!
 
 # Set chassis
