@@ -1,4 +1,8 @@
 post_install() {
   # Enable required systemd services for nabu
   systemctl enable nabu-post-install qrtr-ns pd-mapper tqftpserv rmtfs qbootctl
+  # Set rotation in Kwin for KDE-Plasma
+  if [ -d /home/oem ]; then
+    install -Dm644 "/opt/nabu-tweaks/kwin/kwinoutputconfig.json" "/home/oem/.config/kwinoutputconfig.json"
+  fi
 }
