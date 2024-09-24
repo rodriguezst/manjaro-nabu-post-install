@@ -1,6 +1,14 @@
 post_install() {
+  # Create fstab file
+  cat > /etc/fstab << "EOF"
+# <file system> <dir> <type> <options> <dump> <pass>
+PARTLABEL=esp    /boot/efi  vfat    defaults,noexec,nodev,showexec     0   0
+PARTLABEL=linux  /          ext4    defaults,errors=remount-ro         0   1
+  EOF
+
   # Enable required systemd services for nabu
   systemctl enable nabu-post-install qrtr-ns pd-mapper tqftpserv rmtfs qbootctl
+  
   # Set rotation in Kwin for KDE-Plasma
   if [ -d /home/oem ]; then
     install -Dm644 "/opt/nabu-tweaks/kwin/kwinoutputconfig.json" "/home/oem/.config/kwinoutputconfig.json"
