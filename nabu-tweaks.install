@@ -6,4 +6,5 @@ post_install() {
   if [ -d /home/oem ]; then
     install -Dm644 "/opt/nabu-tweaks/kwin/kwinoutputconfig.json" "/home/oem/.config/kwinoutputconfig.json"
   fi
+  install -Dm644 "/opt/nabu-tweaks/kwin/kwinoutputconfig.json" "/etc/skel/.config/kwinoutputconfig.json"
 }
