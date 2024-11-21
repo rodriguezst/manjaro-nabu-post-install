@@ -2,7 +2,7 @@
 
 pkgname=nabu-tweaks
 pkgver=20$(date +%y%m%d)
-pkgrel=1
+pkgrel=2
 pkgdesc="Tweaks needed to run Manjaro ARM on Xiaomi Pad 5"
 arch=('any')
 url="https://www.manjaro.org"
@@ -21,7 +21,7 @@ sha256sums=('709dd529c2db86798d932c32290f0325f176f133eb3352ebff774d046d7f3359'
             'f782f8690b0b2afae07701c10d40e1a5dabfdcc5ad871188541df1cbf34ae9cc')
 
 package() {
-    depends=('qbootctl' 'rmtfs' 'pd-mapper' 'tqftpserv')
+    depends=('qbootctl' 'rmtfs' 'tqftpserv')
     install -Dm755 "${srcdir}/nabu-post-install" -t "${pkgdir}/usr/bin/"
     install -Dm644 "${srcdir}/nabu-post-install.service" -t "${pkgdir}/usr/lib/systemd/system/"
     # Install ALSA UCM profiles

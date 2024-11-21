@@ -1,6 +1,6 @@
 post_install() {
   # Enable required systemd services for nabu
-  systemctl enable nabu-post-install qrtr-ns pd-mapper tqftpserv rmtfs qbootctl
+  systemctl enable nabu-post-install qrtr-ns tqftpserv rmtfs qbootctl
   
   # Set rotation in Kwin for KDE-Plasma
   if [ -d /home/oem ]; then
